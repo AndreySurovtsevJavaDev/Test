@@ -1,0 +1,5 @@
+package Tasks;
+
+class Palindrome {
+    
+}
