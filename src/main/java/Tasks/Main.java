@@ -12,8 +12,7 @@ public class Main {
         System.out.println("// --- 1. Проверить строку на палиндром ---");
 
         String str = "белиберда";
-        Palindrome pal = new Palindrome(str);
-        pal.checkPalindrome();
+        LocalMethods.checkPalindrome(str);
 
         //---------------------------------------------------
 
@@ -64,12 +63,11 @@ public class Main {
         // 6. Напишите метод, который сортирует список строк в обратном порядке.
         System.out.println("//--- 6. метод возвращающий список строк в обратном порядке ---");
         String[] arr = {"1", "2", "три", "4", "5", "шесть"};
-        ReverseArray stringArray = new ReverseArray(arr);
-        System.out.println("Исходный массив: " + stringArray);
+//        ReverseArray stringArray = new ReverseArray(arr);
+        System.out.println("Исходный массив: " + Arrays.toString(arr));
 
-        String[] newArr = stringArray.reverseArray();
+        String[] newArr = LocalMethods.reverse(arr);
         System.out.println("Отсортированный массив: " + Arrays.toString(newArr));
-
         //---------------------------------------------------
         // 9. Реализуйте интерфейс Comparable для класса Employee (с полем salary)
         // проверка реализации
@@ -133,21 +131,13 @@ public class Main {
 }
 
 //---------------------------------------------------
-// класс Palindrome для задачи 1
-
-class Palindrome{
-    public String str;
-
-    public Palindrome(String str){
-        this.str = str;
-    }
-
-    public void checkPalindrome(){
-        System.out.print(str);
-        System.out.println();
+// Общий класс для разных методов из задач
+class LocalMethods{
+    // 1. Проверка на Palindrome
+    public static void checkPalindrome(String str){
+        System.out.println("Входящая строка" + str);
 
         boolean palindrome = true;
-
         for (int i = 0, j = str.length() - 1; i < j ;i++, j--) {
             if (str.charAt(i) == str.charAt(j)) {}
             else {palindrome = false;
@@ -160,6 +150,24 @@ class Palindrome{
             System.out.println("Не палиндром");
         }
     }
+
+    //---------------------------------------------------
+    // 6. метод, который сортирует список строк в обратном порядке.
+    public static String[] reverse(String[] array) {
+        String[] newArray = new String[array.length];
+        for (int i = array.length - 1, j = 0; i >= 0; i--, j++) {
+            newArray[j] = array[i];
+        }
+        return newArray;
+    }
+
+    //---------------------------------------------------
+    // 13. Метод, который удаляет дубликаты из строк
+    public static String deleteDuplicate(String str) {
+        String newStr = "0123456789";
+        return newStr;
+    }
+
 }
 
 //---------------------------------------------------
@@ -208,28 +216,7 @@ class Runner implements Runnable {
 }
 
 //---------------------------------------------------
-// 6. Напишите метод, который сортирует список строк в обратном порядке.
-// помещаю метод в отдельный класс
-class ReverseArray {
-    String[] array;
-
-    public ReverseArray(String[] array) {
-        this.array = array;
-    }
-
-    public String[] reverseArray() {
-        String[] newArray = new String[array.length];
-        for (int i = array.length - 1, j = 0; i >= 0; i--, j++) {
-            newArray[j] = array[i];
-        }
-       return newArray;
-    }
-
-    @Override
-    public String toString() {
-        return Arrays.toString(array);
-    }
-}
+//
 
 //---------------------------------------------------
 // 9. Реализуйте интерфейс Comparable для класса Employee (с полем salary).
@@ -261,6 +248,7 @@ class Employee implements Comparable<Employee> {
                 " age = " + age;
     }
 }
+
 
 //---------------------------------------------------
 // 14 реализовать класс immutable
