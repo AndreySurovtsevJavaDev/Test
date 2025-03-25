@@ -11,11 +11,10 @@ public class Main {
         // 1. Проверить строку на палиндром
         System.out.println("// --- 1. Проверить строку на палиндром ---");
 
-        String str = "Строка для проверки на палиндром";
+        String str = "белиберда";
         Palindrome pal = new Palindrome(str);
         pal.checkPalindrome();
 
-        System.out.println();
         //---------------------------------------------------
 
         // 2. переопределить equals И hashCode
@@ -64,6 +63,12 @@ public class Main {
 
         // 6. Напишите метод, который сортирует список строк в обратном порядке.
         System.out.println("//--- 6. метод возвращающий список строк в обратном порядке ---");
+        String[] arr = {"1", "2", "три", "4", "5", "шесть"};
+        ReverseArray stringArray = new ReverseArray(arr);
+        System.out.println("Исходный массив: " + stringArray);
+
+        String[] newArr = stringArray.reverseArray();
+        System.out.println("Отсортированный массив: " + Arrays.toString(newArr));
 
         //---------------------------------------------------
         // 9. Реализуйте интерфейс Comparable для класса Employee (с полем salary)
@@ -141,9 +146,18 @@ class Palindrome{
         System.out.print(str);
         System.out.println();
 
+        boolean palindrome = true;
+
         for (int i = 0, j = str.length() - 1; i < j ;i++, j--) {
-            System.out.print(str.charAt(i));
-            System.out.print(str.charAt(j));
+            if (str.charAt(i) == str.charAt(j)) {}
+            else {palindrome = false;
+                break;}
+        }
+
+        if (palindrome == true) {
+            System.out.println("Палиндром");
+        } else {
+            System.out.println("Не палиндром");
         }
     }
 }
@@ -190,6 +204,30 @@ class Runner implements Runnable {
     @Override
     public void run() {
         System.out.println();
+    }
+}
+
+//---------------------------------------------------
+// 6. Напишите метод, который сортирует список строк в обратном порядке.
+// помещаю метод в отдельный класс
+class ReverseArray {
+    String[] array;
+
+    public ReverseArray(String[] array) {
+        this.array = array;
+    }
+
+    public String[] reverseArray() {
+        String[] newArray = new String[array.length];
+        for (int i = array.length - 1, j = 0; i >= 0; i--, j++) {
+            newArray[j] = array[i];
+        }
+       return newArray;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(array);
     }
 }
 
