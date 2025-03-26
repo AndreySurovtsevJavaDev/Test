@@ -1,12 +1,12 @@
 package Tasks;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) throws FileNotFoundException { // исключение на случай, когда scanner не нашёл файл
+    public static void main(String[] args) throws IOException { // исключение на случай, когда scanner не нашёл файл
 
         // 1. Проверить строку на палиндром
         System.out.println("// --- 1. Проверить строку на палиндром ---");
@@ -34,19 +34,22 @@ public class Main {
         // 3. Считать данные из файла
         System.out.println("// --- 3. Считать данные из файла ---");
 
-        File file = new File("files/textFile.txt");
-
+        FileReader file = new FileReader("files/textFile.txt");
         Scanner scanner = new Scanner(file);
+
         while (scanner.hasNextLine()) {
             System.out.println(scanner.nextLine());
         }
-
         scanner.close(); // нужно закрывать. чтобы освобождались ресурсы и закрывался поток.
 
         //---------------------------------------------------
 
         // 4. Создайте потокобезопасный счётчик с использованием synchronized
-
+        System.out.println("// --- 4. потокобезопасный счётчик с использованием synchronized ---");
+        LocalMethods newCounter = new LocalMethods();
+        for (int i = 0; i < 5; i++) {
+            newCounter.increment();
+        }
 
         //---------------------------------------------------
 
@@ -90,7 +93,9 @@ public class Main {
 
         System.out.println(employee1.compareTo(employee2));
         if (employee1.compareTo(employee2) < 0) {
-            System.out.println("не одинаково");
+            System.out.println("меньше");
+        } else if (employee1.compareTo(employee2) > 0) {
+            System.out.println("больше");
         } else {
             System.out.println("одинаково");
         };
@@ -117,7 +122,7 @@ public class Main {
         System.out.println("//--- 11. Поток, который выводит числа от 1 до 10 с задержкой в секунду---");
 
         MultiThread counterThread = new MultiThread();
-        counterThread.start();
+        counterThread.run();
 
         //---------------------------------------------------
         // 12. Реализуйте простой кэш на основе HashMap
@@ -134,12 +139,20 @@ public class Main {
 
         //---------------------------------------------------
         // 14. Реализуйте класс ImmutableClass (неизменяемый класс)
-        System.out.println("// --- 15 Реализация класса ImmutableClass---");
+        System.out.println("// --- 14 Реализация класса ImmutableClass---");
 
         //---------------------------------------------------
         // 15. Напишите код, который демонстрирует работу try-with-resources
         System.out.println("// --- 15 демонстрация работы try-with-resources---");
-
+        FileReader fileReader = new FileReader("files/textFile.txt");
+        try(Scanner scanner1 = new Scanner(fileReader);){
+            while (scanner1.hasNextLine()) {
+                System.out.println(scanner1.nextLine());
+            }
+            throw new RuntimeException("Ошибка");
+        } catch (Exception e) {
+            System.out.println("Ошибка обработана");
+        }
 
         //---------------------------------------------------
         // 16. Создайте анонимный класс, реализующий интерфейс Runnable.
@@ -194,6 +207,7 @@ public class Main {
         System.out.println("string: " + string.getValue());
         System.out.println("boolean: " + bool.getValue());
     }
+
 }
 
 //---------------------------------------------------
@@ -205,8 +219,8 @@ class LocalMethods{
 
         boolean palindrome = true;
         for (int i = 0, j = str.length() - 1; i < j ;i++, j--) {
-            if (str.charAt(i) == str.charAt(j)) {}
-            else {palindrome = false;
+            if (str.charAt(i) != str.charAt(j)) {
+                palindrome = false;
                 break;}
         }
 
@@ -221,7 +235,8 @@ class LocalMethods{
     // 4. synchronized
     int counter = 0;
     public synchronized void increment() {
-        counter++;
+       counter++;
+        System.out.println(" * " + counter + " * "); // чтобы можно было отличить выдачу из разных потоков
     }
 
     //---------------------------------------------------
@@ -320,17 +335,6 @@ class Person {
 }
 
 //---------------------------------------------------
-// 4. Создайте потокобезопасный счётчик с использованием synchronized.
-class Runner implements Runnable {
-
-    // переопределяем метод run интерфейса Runnable
-    @Override
-    public void run() {
-        System.out.println();
-    }
-}
-
-//---------------------------------------------------
 //
 
 //---------------------------------------------------
@@ -351,7 +355,7 @@ class Employee implements Comparable<Employee> {
         this.salary = salary;
     }
 
-    public int getSalary() {return id;}
+    public int getSalary() {return salary;}
 
     @Override
     public int compareTo(Employee o) {
@@ -370,7 +374,7 @@ class Employee implements Comparable<Employee> {
 
 //---------------------------------------------------
 // 11 Создайте поток, который выводит числа от 1 до 10 с задержкой в 1 секунду
-class MultiThread extends Thread {
+class MultiThread implements Runnable {
     public void run() {
         for (int i = 1; i <= 10; i++) {
             System.out.println(" -- " + i + " -- ");          // пометил так, чтобы лучше было видно как выполняется в консоли, тк идёт не последовательно
