@@ -76,7 +76,10 @@ public class Main {
         System.out.println("Отсортированный массив: " + Arrays.toString(newArr));
 
         //---------------------------------------------------
-        // 7.Создайте класс Singleton с ленивой инициализацией
+        // 7. класс Singleton с ленивой инициализацией
+        System.out.println("//--- 7. Ленивая инициализация ---");
+        Singleton singleton = Singleton.getInstance();
+        System.out.println(singleton);
 
         //---------------------------------------------------
         // 8. Напишите код, который демонстрирует deadlock.
@@ -140,6 +143,10 @@ public class Main {
         //---------------------------------------------------
         // 14. Реализуйте класс ImmutableClass (неизменяемый класс)
         System.out.println("// --- 14 Реализация класса ImmutableClass---");
+        ImmutableClass immutableValue = new ImmutableClass();
+        double goldenRatioNumber = immutableValue.getGoldenRatioNumber();
+
+        System.out.println("Золотое сечение = " + goldenRatioNumber);
 
         //---------------------------------------------------
         // 15. Напишите код, который демонстрирует работу try-with-resources
@@ -160,9 +167,11 @@ public class Main {
         Runnable anonymousRunner = new Runnable() {
             @Override
             public void run() {
-
+                System.out.println("реализовали интерфейс Runnable через анонимный класс");
             }
         };
+
+        anonymousRunner.run();
 
         //---------------------------------------------------
         //  17.  метод, который преобразует список строк в одну строку через запятую
@@ -184,7 +193,7 @@ public class Main {
             listNumber.add((int)(Math.random() * 50));
         }
         System.out.println("Исходный массив: " + listNumber);
-
+        System.out.println("Условие для фильтра: оставить значения < 15");
         System.out.print("После фильтрации остались: ");
         listNumber.stream()
                 .filter( x -> x < 15 )      // отбираем элементы, значения которых меньше 15.
@@ -339,7 +348,17 @@ class Person {
 
 //---------------------------------------------------
 // 7. класс Singleton с ленивой инициализацией
-
+// тут по факту idea подсказывает весь код. Практическую необходимость понял не сильно. (Вроде, Runtime это синглтон)
+class Singleton {
+    private static Singleton instance = new Singleton();
+    private Singleton() {}
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    };
+}
 
 //---------------------------------------------------
 // 9. Реализуйте интерфейс Comparable для класса Employee (с полем salary).
@@ -391,14 +410,12 @@ class MultiThread implements Runnable {
 
 //---------------------------------------------------
 // 14 реализовать класс immutable
-
+// для примера: все врапперы - это иммутабельные классы.
 final class ImmutableClass {
-    final String name;
-    final int age;
-    public ImmutableClass(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
+    private final double goldenRatio = 1.618033988;
+
+    public double getGoldenRatioNumber() { return goldenRatio; }
+    // исходя из наименования и назначения, сеттеров не предполагается.
 }
 
 //---------------------------------------------------
