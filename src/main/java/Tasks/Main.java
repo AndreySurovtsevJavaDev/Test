@@ -73,6 +73,12 @@ public class Main {
         System.out.println("Отсортированный массив: " + Arrays.toString(newArr));
 
         //---------------------------------------------------
+        // 7.Создайте класс Singleton с ленивой инициализацией
+
+        //---------------------------------------------------
+        // 8. Напишите код, который демонстрирует deadlock.
+
+        //---------------------------------------------------
         // 9. Реализуйте интерфейс Comparable для класса Employee (с полем salary)
         System.out.println("//--- 9. Реализация интерфейса Comparable ---");
 
@@ -95,35 +101,31 @@ public class Main {
 
         int[] array = {16,21,12,1,2,9};
         System.out.println("Исходный массив: " + Arrays.toString(array));
-        int max = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] > max) {max = array[i];}
-        }
-        System.out.println("Максимальное значение = " + max);
+
+        LocalMethods.getMaxArrayValue(array);
 
         // проще, конечно, стандартными средствами через List))
         List<Integer> list = new ArrayList<>();
-        list.add(16);
-        list.add(21);
-        list.add(12);
-        list.add(1);
-        list.add(2);
-        list.add(9);
+        for (int i = 0; i <= 10; i++) {
+            list.add((int)(Math.random() * 30));
+        }
         System.out.println("ArrayList : " + list);
         System.out.println("Максимальное значение = " + list.stream().max(Integer::compareTo).get());
 
         //---------------------------------------------------
-
         // 11. Поток, который выводит числа от 1 до 10 с задержкой в 1 секунду.
         System.out.println("//--- 11. Поток, который выводит числа от 1 до 10 с задержкой в секунду---");
 
         MultiThread counterThread = new MultiThread();
-        counterThread.run();
+        counterThread.start();
+
+        //---------------------------------------------------
+        // 12. Реализуйте простой кэш на основе HashMap
+
 
         //---------------------------------------------------
         // 13. Напишите метод, который удаляет дубликаты из списка строк
-        System.out.println("//--- 13. метод, удаляет дубликаты из списка строк---");
-
+        System.out.println("//--- 13. метод,который удаляет дубликаты из списка строк---");
 
         String[] stringArray = {"1", "2", "три", "4", "5", "шесть", "2", "4", "Шесть", "2", "4", "Три"};
         System.out.println("Исходный массив строк: " + Arrays.toString(stringArray));
@@ -131,7 +133,8 @@ public class Main {
         LocalMethods.deleteDuplicate(stringArray);
 
         //---------------------------------------------------
-        // 14.
+        // 14. Реализуйте класс ImmutableClass (неизменяемый класс)
+        System.out.println("// --- 15 Реализация класса ImmutableClass---");
 
         //---------------------------------------------------
         // 15. Напишите код, который демонстрирует работу try-with-resources
@@ -181,7 +184,6 @@ public class Main {
 }
 
 //---------------------------------------------------
-
 // Общий класс для разных методов из задач
 class LocalMethods{
     // 1. Проверка на Palindrome
@@ -207,9 +209,9 @@ class LocalMethods{
     int counter = 0;
     public synchronized void increment() {
         counter++;
-    };
-    //---------------------------------------------------
+    }
 
+    //---------------------------------------------------
     // 6. метод, который сортирует список строк в обратном порядке.
     public static String[] reverse(String[] array) {
         String[] newArray = new String[array.length];
@@ -217,6 +219,20 @@ class LocalMethods{
             newArray[j] = array[i];
         }
         return newArray;
+    }
+
+    //---------------------------------------------------
+    // 10  метод, который находит максимальное значение в списке чисел.
+    public static int getMaxArrayValue(int[] array) {
+        int[] newArray = Arrays.copyOf(array, array.length);
+        int max = 0;
+        for (int i = 0; i < newArray.length; i++) {
+            if (newArray[i] > max) {
+                max = newArray[i];
+            }
+        }
+        System.out.println("Максимальное значение = " + max);
+        return max;
     }
 
     //---------------------------------------------------
@@ -291,7 +307,6 @@ class Person {
 }
 
 //---------------------------------------------------
-
 // 4. Создайте потокобезопасный счётчик с использованием synchronized.
 class Runner implements Runnable {
 
@@ -304,6 +319,10 @@ class Runner implements Runnable {
 
 //---------------------------------------------------
 //
+
+//---------------------------------------------------
+// 7. класс Singleton с ленивой инициализацией
+
 
 //---------------------------------------------------
 // 9. Реализуйте интерфейс Comparable для класса Employee (с полем salary).
@@ -337,11 +356,11 @@ class Employee implements Comparable<Employee> {
 }
 
 //---------------------------------------------------
-// 14 Создайте поток, который выводит числа от 1 до 10 с задержкой в 1 секунду
+// 11 Создайте поток, который выводит числа от 1 до 10 с задержкой в 1 секунду
 class MultiThread extends Thread {
     public void run() {
         for (int i = 1; i <= 10; i++) {
-            System.out.println(i);
+            System.out.println(" -- " + i + " -- ");          // пометил так, чтобы лучше было видно как выполняется в консоли, тк идёт не последовательно
 
             try {
                 Thread.sleep(1000);
