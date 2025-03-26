@@ -166,6 +166,19 @@ public class Main {
         // 19. Напишите код, который демонстрирует работу Stream API для фильтрации списка чисел
         System.out.println("//--- 19. фильтрация списка чисел с помощью Stream API ---");
 
+        final List<Integer> listNumber = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            listNumber.add((int)(Math.random() * 50));
+        }
+        System.out.println("Исходный массив: " + listNumber);
+
+        System.out.print("После фильтрации остались: ");
+        listNumber.stream()
+                .filter( x -> x < 15 )      // отбираем элементы, значения которых меньше 15.
+                .forEach(x -> System.out.print(x + ", "));
+
+        System.out.println();
+
         //---------------------------------------------------
         // 20. класс Box с дженериком (Generic), который может хранить любой тип данных.
         System.out.println("// --- 20. Класс Box, который принимает любой тип данных ---");
@@ -374,6 +387,15 @@ class MultiThread extends Thread {
 
 //---------------------------------------------------
 // 14 реализовать класс immutable
+
+final class ImmutableClass {
+    final String name;
+    final int age;
+    public ImmutableClass(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
 
 //---------------------------------------------------
 // 18. Реализуйте класс BankAccount с методами deposit() и withdraw() (с проверкой баланса)
