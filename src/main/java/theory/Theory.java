@@ -1,6 +1,21 @@
 package theory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Theory {
+    // пример для вопроса 10
+    int number;
+    public void showNumber(int number) {
+        this.number = number;
+        System.out.println("Родительский метод выводи указанный номер = " + number);
+    }
+
+    public static void main(String[] args) {
+        Child child = new Child();
+
+        child.showNumber(5);
+    }
 }
 
 // 1. Что такое JVM, JRE и JDK? В чём разница?
@@ -93,6 +108,7 @@ public class Theory {
 
 
 // 10. Что такое this и super? Приведите примеры использования
+// Оба понятия связанны с экземплярами класса и не могут использоваться в статических методах
 // ключевое слово this вызывает конкретный объект внутри класса
 // Например, у нас есть класс User, в классе User мы объявили переменную private String name и создали сеттер, чтобы задавать имя:
 // public static void setName(String name) {
@@ -100,6 +116,20 @@ public class Theory {
 // исспользуется this - оно указывает, что обращаемся мы к переменной в классе, а не в методе.
 // this.name = name;
 // }
+// ключевое слово super позволяет обращаться к методам родительского класса (супер-класса), находясь в классе-наследнике. Полезно, когда в классе-наследнике
+//методы переопределены, а нам нужно использовать изначальную реализацию (как в супер-классе)
+// Пример:
+
+class Child extends Theory {
+    @Override
+    public void showNumber(int number) {
+        this.number = number;
+        super.showNumber(number);
+        System.out.println("дочерний метод умножает указанный номер на 2. итого = " + number * 2);
+    }
+}
+// так же ключевое слово super позволяет обращаться к конструкторам супер-класса.
+
 //--------------------------------------------------------------------------------------------------------------------
 
 
