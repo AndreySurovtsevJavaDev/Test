@@ -4,6 +4,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Main {
 
@@ -78,11 +80,43 @@ public class Main {
         //---------------------------------------------------
         // 7. класс Singleton с ленивой инициализацией
         System.out.println("//--- 7. Ленивая инициализация ---");
+
         Singleton singleton = Singleton.getInstance();
         System.out.println(singleton);
 
         //---------------------------------------------------
         // 8. Напишите код, который демонстрирует deadlock.
+        // Что нужно, простыми словами: 2 потока, 2 монитора, блокировка в разном порядке + 1 поток должен дождаться пока второй захватит свои мониторы
+        System.out.println("//--- 8. Демонстрация deadlock ---");
+
+        Object lock1 = new Object();
+        Object lock2 = new Object();
+
+        Thread thread1 = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " Начался");
+            synchronized (lock1) {
+
+                // дожидаемся, чтобы второй поток захватил свои мониторы
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                synchronized (lock2) {}
+            }
+            System.out.println(Thread.currentThread().getName() + " Закончился");
+        }, "Thread-1");
+
+        Thread thread2 = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " начался");
+            synchronized (lock2) {
+                synchronized (lock1) {}
+            }
+            System.out.println(Thread.currentThread().getName() + " Закончился");
+        }, "Thread-2");
+
+        thread1.start();
+        thread2.start();
 
         //---------------------------------------------------
         // 9. Реализуйте интерфейс Comparable для класса Employee (с полем salary)
@@ -355,9 +389,6 @@ class Person {
                 '}';
     }
 }
-
-//---------------------------------------------------
-//
 
 //---------------------------------------------------
 // 7. класс Singleton с ленивой инициализацией
