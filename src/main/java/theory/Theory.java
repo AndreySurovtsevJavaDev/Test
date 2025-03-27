@@ -13,8 +13,17 @@ public class Theory {
 
     public static void main(String[] args) {
         Child child = new Child();
-
         child.showNumber(5);
+
+        double balance = 20.0d;
+        double subtraction = 16.33d;
+        double total = balance - subtraction;
+        double avg = total/2;
+        double sum = avg+subtraction;
+        System.out.println(total);
+        System.out.println(avg);
+        System.out.println(sum);
+//        System.out.println(Math.exp(balance));
     }
 }
 

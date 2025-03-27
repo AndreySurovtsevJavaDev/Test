@@ -88,11 +88,10 @@ public class Main {
         // 9. Реализуйте интерфейс Comparable для класса Employee (с полем salary)
         System.out.println("//--- 9. Реализация интерфейса Comparable ---");
 
-        List<Employee> employeeList = new ArrayList<>();
         Employee employee1 = new Employee(1, "Тимофей", 2600);
-        Employee employee2 = new Employee(2, "Тимофей", 2600);
-        Employee employee3 = new Employee(3, "Тимофей", 2700);
-        Employee employee4 = new Employee(4, "Тимофей", 2500);
+        Employee employee2 = new Employee(2, "Тимофей", 2400);
+//        Employee employee3 = new Employee(3, "Тимофей", 2700);
+//        Employee employee4 = new Employee(4, "Тимофей", 2500);
 
         System.out.println(employee1.compareTo(employee2));
         if (employee1.compareTo(employee2) < 0) {
@@ -101,7 +100,7 @@ public class Main {
             System.out.println("больше");
         } else {
             System.out.println("одинаково");
-        };
+        }
 
         //---------------------------------------------------
         // 10. Напишите метод, который находит максимальное значение в списке чисел.
@@ -118,7 +117,9 @@ public class Main {
             list.add((int)(Math.random() * 30));
         }
         System.out.println("ArrayList : " + list);
-        System.out.println("Максимальное значение = " + list.stream().max(Integer::compareTo).get());
+        System.out.println("Максимальное значение = " + list.stream()
+                .max(Integer::compareTo)
+                .get());
 
         //---------------------------------------------------
         // 11. Поток, который выводит числа от 1 до 10 с задержкой в 1 секунду.
@@ -129,7 +130,18 @@ public class Main {
 
         //---------------------------------------------------
         // 12. Реализуйте простой кэш на основе HashMap
+        System.out.println("//--- 12. простой кэш на основе hashMap---");
 
+        // ну пусть будет список файлов с айдишниками
+        Map<Integer, String> hash = new HashMap<>();
+        hash.put(1, "АООК");
+        hash.put(2, "АОСР");
+        hash.put(3, "Акт приёмки кровли");
+        hash.put(4, "Акт об окончании пусконаладочных работ");
+        hash.put(5, "Акт готовности электромонтажных работ");
+        hash.put(6, "Акт осмотра открытых рвов и котлованов под фундаменты");
+
+        System.out.println(hash);
 
         //---------------------------------------------------
         // 13. Напишите метод, который удаляет дубликаты из списка строк
@@ -152,7 +164,7 @@ public class Main {
         // 15. Напишите код, который демонстрирует работу try-with-resources
         System.out.println("// --- 15 демонстрация работы try-with-resources---");
         FileReader fileReader = new FileReader("files/textFile.txt");
-        try(Scanner scanner1 = new Scanner(fileReader);){
+        try(Scanner scanner1 = new Scanner(fileReader)){
             while (scanner1.hasNextLine()) {
                 System.out.println(scanner1.nextLine());
             }
@@ -163,13 +175,10 @@ public class Main {
 
         //---------------------------------------------------
         // 16. Создайте анонимный класс, реализующий интерфейс Runnable.
+        // Лямбда выражение idea сделала сама, объяснить не смогу.
         System.out.println("// --- 16. Анонимный класс, реализующий интерфейс Runnable ---");
-        Runnable anonymousRunner = new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("реализовали интерфейс Runnable через анонимный класс");
-            }
-        };
+        Runnable anonymousRunner;
+        anonymousRunner = () -> System.out.println("реализовали интерфейс Runnable через анонимный класс");
 
         anonymousRunner.run();
 
@@ -183,6 +192,15 @@ public class Main {
         // 18. Проверка баланса BankAccount
         System.out.println("//--- 18. проверка баланса BankAccount ---");
 
+        BankAccount onotoleAccount = new BankAccount("Онотоле");
+
+        onotoleAccount.deposit(160.58d);
+        onotoleAccount.getBalance();
+        onotoleAccount.withdraw(160.59d);
+        onotoleAccount.withdraw(160.0d);
+        onotoleAccount.withdraw(0.58d);
+        onotoleAccount.deposit(50.0d);
+        onotoleAccount.getBalance();
 
         //---------------------------------------------------
         // 19. Напишите код, который демонстрирует работу Stream API для фильтрации списка чисел
@@ -233,7 +251,7 @@ class LocalMethods{
                 break;}
         }
 
-        if (palindrome == true) {
+        if (palindrome) {
             System.out.println("Палиндром");
         } else {
             System.out.println("Не палиндром");
@@ -260,27 +278,25 @@ class LocalMethods{
 
     //---------------------------------------------------
     // 10  метод, который находит максимальное значение в списке чисел.
-    public static int getMaxArrayValue(int[] array) {
+    public static void getMaxArrayValue(int[] array) {
         int[] newArray = Arrays.copyOf(array, array.length);
         int max = 0;
-        for (int i = 0; i < newArray.length; i++) {
-            if (newArray[i] > max) {
-                max = newArray[i];
+        for (int i : newArray)
+            if (i > max) {
+                max = i;
             }
-        }
+
         System.out.println("Максимальное значение = " + max);
-        return max;
     }
 
     //---------------------------------------------------
-
     // 13. Метод, который удаляет дубликаты из списка строк
-    // Знаю, что это максимально не оптимально и медленно и лучше использовать коллекцию List
-    public static String[] deleteDuplicate(String[] array) {
+    // Знаю, что это максимально не оптимально и медленно и лучше использовать List
+    public static void deleteDuplicate(String[] array) {
         int duplicates = 0;
         String[] newTempArray = Arrays.copyOf(array, array.length);
-        for (int i = 0; i < newTempArray.length - 1; i++) {
-            for (int j = i + 1; j < newTempArray.length; j++) {
+        for (int i = 0; i < array.length - 1; i++) {
+            for (int j = i + 1; j < array.length; j++) {
                 if (array[i].equals(array[j])) {
                    duplicates++;
                     newTempArray[i] = null;
@@ -295,7 +311,6 @@ class LocalMethods{
             }
         }
         System.out.println("Массив без дублей: " + Arrays.toString(newArray));
-        return newArray;
     }
 
     //---------------------------------------------------
@@ -357,7 +372,7 @@ class Singleton {
             instance = new Singleton();
         }
         return instance;
-    };
+    }
 }
 
 //---------------------------------------------------
@@ -379,10 +394,9 @@ class Employee implements Comparable<Employee> {
     @Override
     public int compareTo(Employee o) {
         // Делаем прям как написано в документации: a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object
-        if (this.getSalary() == o.getSalary()) return 0;
-        else if (this.getSalary() > o.getSalary()) return 1;
-        else return -1;
-    }
+        // Но idea предложила сменить на более лаконичную запись, т.к метод уже реализован и заново его писать не надо
+        return Integer.compare(this.getSalary(), o.getSalary());
+        }
 
         public String toString(){
         return "Employee id = " + id +
@@ -420,13 +434,30 @@ final class ImmutableClass {
 
 //---------------------------------------------------
 // 18. Реализуйте класс BankAccount с методами deposit() и withdraw() (с проверкой баланса)
-class BankAccount {
-    public static void deposit(){
+class BankAccount{
+    String userName;
+    double balance = 0d;
 
-    };
+    public BankAccount(String userName) {
+        this.userName = userName;
+    }
 
-    public static void withdraw(){
+    public void getBalance() {
+        System.out.println(balance);
+    }
 
+    public void deposit(double balance) {
+       this.balance += balance;
+    }
+
+    public void withdraw(double balance) {
+        double result = this.balance - balance;
+        System.out.println(result);
+        if(result < 0){
+            System.out.println("Ошибка, нельзя снять больше, чем есть на счету");
+        } else {
+            this.balance = result;
+        }
     }
 }
 
