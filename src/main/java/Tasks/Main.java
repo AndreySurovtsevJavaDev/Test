@@ -2,6 +2,7 @@ package Tasks;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class Main {
@@ -41,7 +42,6 @@ public class Main {
             System.out.println(scanner.nextLine());
         }
         scanner.close(); // нужно закрывать. чтобы освобождались ресурсы и закрывался поток.
-
         //---------------------------------------------------
 
         // 4. Создайте потокобезопасный счётчик с использованием synchronized
@@ -78,11 +78,43 @@ public class Main {
         //---------------------------------------------------
         // 7. класс Singleton с ленивой инициализацией
         System.out.println("//--- 7. Ленивая инициализация ---");
+
         Singleton singleton = Singleton.getInstance();
         System.out.println(singleton);
 
         //---------------------------------------------------
         // 8. Напишите код, который демонстрирует deadlock.
+        // Что нужно, простыми словами: 2 потока, 2 монитора, блокировка в разном порядке + 1 поток должен дождаться пока второй захватит свои мониторы
+        System.out.println("//--- 8. Демонстрация deadlock ---");
+
+        Object lock1 = new Object();
+        Object lock2 = new Object();
+
+        Thread thread1 = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " Начался");
+            synchronized (lock1) {
+
+                // дожидаемся, чтобы второй поток захватил свои мониторы
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                synchronized (lock2) {}
+            }
+            System.out.println(Thread.currentThread().getName() + " Закончился");
+        }, "Thread-1");
+
+        Thread thread2 = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " начался");
+            synchronized (lock2) {
+                synchronized (lock1) {}
+            }
+            System.out.println(Thread.currentThread().getName() + " Закончился");
+        }, "Thread-2");
+
+        thread1.start();
+        thread2.start();
 
         //---------------------------------------------------
         // 9. Реализуйте интерфейс Comparable для класса Employee (с полем salary)
@@ -90,8 +122,6 @@ public class Main {
 
         Employee employee1 = new Employee(1, "Тимофей", 2600);
         Employee employee2 = new Employee(2, "Тимофей", 2400);
-//        Employee employee3 = new Employee(3, "Тимофей", 2700);
-//        Employee employee4 = new Employee(4, "Тимофей", 2500);
 
         System.out.println(employee1.compareTo(employee2));
         if (employee1.compareTo(employee2) < 0) {
@@ -194,12 +224,12 @@ public class Main {
 
         BankAccount onotoleAccount = new BankAccount("Онотоле");
 
-        onotoleAccount.deposit(160.58d);
+        onotoleAccount.deposit("160.58");
         onotoleAccount.getBalance();
-        onotoleAccount.withdraw(160.59d);
-        onotoleAccount.withdraw(160.0d);
-        onotoleAccount.withdraw(0.58d);
-        onotoleAccount.deposit(50.0d);
+        onotoleAccount.withdraw("160.59");
+        onotoleAccount.withdraw("160.0");
+        onotoleAccount.withdraw("0.58");
+        onotoleAccount.deposit("50.0");
         onotoleAccount.getBalance();
 
         //---------------------------------------------------
@@ -359,9 +389,6 @@ class Person {
 }
 
 //---------------------------------------------------
-//
-
-//---------------------------------------------------
 // 7. класс Singleton с ленивой инициализацией
 // тут по факту idea подсказывает весь код. Практическую необходимость понял не сильно. (Вроде, Runtime это синглтон)
 class Singleton {
@@ -436,7 +463,7 @@ final class ImmutableClass {
 // 18. Реализуйте класс BankAccount с методами deposit() и withdraw() (с проверкой баланса)
 class BankAccount{
     String userName;
-    double balance = 0d;
+    BigDecimal balance = new BigDecimal("0.00000");
 
     public BankAccount(String userName) {
         this.userName = userName;
@@ -446,17 +473,19 @@ class BankAccount{
         System.out.println(balance);
     }
 
-    public void deposit(double balance) {
-       this.balance += balance;
+    public void deposit(String input) {
+        BigDecimal newInput = new BigDecimal(input);
+        this.balance = this.balance.add(newInput);
+        System.out.println(balance);
     }
 
-    public void withdraw(double balance) {
-        double result = this.balance - balance;
-        System.out.println(result);
-        if(result < 0){
+    public void withdraw(String input) {
+        BigDecimal newInput = new BigDecimal(input);
+        BigDecimal result = this.balance.subtract(newInput);
+        if(result.compareTo(BigDecimal.ZERO) < 0) {
             System.out.println("Ошибка, нельзя снять больше, чем есть на счету");
         } else {
-            this.balance = result;
+            System.out.println("Баланс: " + result);
         }
     }
 }
