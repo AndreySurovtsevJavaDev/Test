@@ -15,9 +15,6 @@ public class Theory {
     public static void main(String[] args) {
         Child child = new Child();
         child.showNumber(5);
-
-        BigDecimal bigDecimal = new BigDecimal("0.00000");
-        System.out.println(bigDecimal);
     }
 }
 
